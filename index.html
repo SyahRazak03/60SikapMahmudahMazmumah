@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuiz Sikap Mahmudah & Mazmumah</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+            margin: 0;
+            padding: 20px;
+            color: #1e2937;
+        }
+        
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #4ade80, #60a5fa);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.8rem;
+            margin: 0;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+        }
+
+        .main-content {
+            padding: 40px 35px;
+            min-height: 550px;
+        }
+
+        .screen {
+            display: none;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+
+        /* Penjelasan */
+        .explain-screen h2 {
+            font-size: 2.3rem;
+            margin: 20px 0 15px;
+        }
+        
+        .explain-box {
+            background: #f0f9ff;
+            border: 6px solid #60a5fa;
+            border-radius: 25px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        /* Nama Screen */
+        input[type="text"] {
+            width: 85%;
+            padding: 20px;
+            font-size: 1.8rem;
+            border: 5px solid #60a5fa;
+            border-radius: 25px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Kuiz */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .progress {
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            flex: 1;
+            margin: 0 20px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4ade80, #22d3ee);
+            border-radius: 20px;
+            transition: width 0.4s;
+        }
+
+        .question-card {
+            background: #f8fafc;
+            border-radius: 25px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+        }
+        
+        .question-text {
+            font-size: 2.1rem;
+            line-height: 1.5;
+            margin: 25px 0;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            border: 4px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 20px 25px;
+            font-size: 1.75rem;
+            margin: 12px 0;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .option-label:hover {
+            border-color: #60a5fa;
+        }
+
+        /* Hasil */
+        .score-circle {
+            width: 230px;
+            height: 230px;
+            margin: 20px auto;
+            border-radius: 50%;
+            background: conic-gradient(#4ade80 var(--score-percent), #e2e8f0 var(--score-percent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .score-inner {
+            width: 170px;
+            height: 170px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            font-weight: 700;
+        }
+
+        .btn {
+            background: #4ade80;
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 1.6rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            box-shadow: 0 8px 15px rgba(74, 222, 128, 0.4);
+        }
+        
+        .btn:hover {
+            transform: translateY(-4px);
+        }
+        
+        .btn-red {
+            background: #f59e0b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- 1. Penjelasan -->
+        <div id="explain-screen" class="main-content screen active">
+            <h1 style="text-align:center; margin-bottom:30px;">🌟 Kuiz Sikap Mahmudah & Mazmumah 🌟</h1>
+            
+            <div class="explain-box">
+                <h2 style="color:#15803d;">✅ Sikap Mahmudah</h2>
+                <p style="font-size:1.8rem; line-height:1.6;">
+                    Sikap yang <strong>baik dan terpuji</strong>.<br>
+                    Contoh: Menolong ibu bapa, jujur, rajin belajar, sopan, dan berkongsi.
+                </p>
+            </div>
+
+            <div class="explain-box">
+                <h2 style="color:#b91c1c;">❌ Sikap Mazmumah</h2>
+                <p style="font-size:1.8rem; line-height:1.6;">
+                    Sikap yang <strong>buruk dan tidak baik</strong>.<br>
+                    Contoh: Berbohong, malas, mengganggu, membuang sampah sembarangan, dan kasar.
+                </p>
+            </div>
+
+            <p style="font-size:1.7rem; text-align:center; margin-top:40px;">
+                Dalam kuiz ini, awak kena pilih sama ada soalan itu <strong>Sikap Mahmudah</strong> atau <strong>Sikap Mazmumah</strong>.
+            </p>
+
+            <div style="text-align:center; margin-top:40px;">
+                <button onclick="goToNameScreen()" class="btn">Saya Faham! Mari Mulakan Kuiz →</button>
+            </div>
+        </div>
+
+        <!-- 2. Isi Nama -->
+        <div id="name-screen" class="main-content screen">
+            <h2 style="text-align:center; font-size:2.4rem; color:#1e40af;">Siapa Nama Penuh Awak?</h2>
+            <p style="text-align:center; font-size:1.5rem; margin:15px 0;">Contoh: Ali bin Abu</p>
+            
+            <input type="text" id="full-name" placeholder="Tulis nama penuh awak di sini">
+            
+            <div style="text-align:center; margin-top:40px;">
+                <button onclick="startQuiz()" class="btn">MULAKAN KUIZ SEKARANG</button>
+            </div>
+        </div>
+
+        <!-- 3. Kuiz -->
+        <div id="quiz-screen" class="main-content screen">
+            <div class="quiz-header">
+                <div><strong id="student-name"></strong></div>
+                <div class="progress"><div id="progress-bar" class="progress-bar"></div></div>
+                <div><span id="q-counter">1</span>/60</div>
+            </div>
+
+            <div class="question-card">
+                <div style="font-size:1.6rem; color:#64748b;">Soalan <span id="q-num">1</span></div>
+                <p id="question-text" class="question-text"></p>
+                
+                <div class="options" id="options">
+                    <!-- JS akan isi -->
+                </div>
+            </div>
+
+            <div style="text-align:center;">
+                <button onclick="prevQuestion()" id="prev-btn" class="btn btn-secondary" style="background:#64748b; display:none;">← Sebelumnya</button>
+                <button onclick="nextQuestion()" id="next-btn" class="btn">Seterusnya →</button>
+                <button onclick="submitQuiz()" id="submit-btn" class="btn" style="display:none; background:#f59e0b;">SELESAI & LIHAT SKOR</button>
+            </div>
+        </div>
+
+        <!-- 4. Hasil -->
+        <div id="result-screen" class="main-content screen">
+            <h2 style="text-align:center; font-size:2.5rem;">Tahniah, <span id="result-name"></span>! 🎉</h2>
+            
+            <div class="score-circle" id="score-circle">
+                <div class="score-inner">
+                    <span id="score-text">0</span>
+                    <small style="font-size:1.2rem;">/60</small>
+                </div>
+            </div>
+            
+            <p id="result-message" style="font-size:2rem; margin:20px 0;"></p>
+            
+            <div style="text-align:center; margin-top:30px;">
+                <button onclick="downloadPDF()" class="btn btn-red">📥 Download Laporan PDF</button>
+                <button onclick="printReport()" class="btn">🖨️ Cetak Laporan</button>
+                <button onclick="restartQuiz()" class="btn" style="background:#64748b;">Buat Kuiz Lagi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bahagian untuk Print & PDF -->
+    <div id="print-section" style="display:none; padding:40px; background:white; font-family:'Comic Neue', cursive;">
+        <h1 style="text-align:center; color:#1e40af;">🏆 LAPORAN KUIZ SIAP 🏆</h1>
+        <h2 style="text-align:center; margin:20px 0;">Sikap Mahmudah & Mazmumah</h2>
+        
+        <div style="text-align:center; margin:30px 0; font-size:2rem;">
+            Nama: <strong id="print-name"></strong><br><br>
+            Skor: <strong id="print-score" style="color:#15803d; font-size:2.5rem;"></strong>
+        </div>
+        
+        <h3 style="margin-top:40px;">Senarai Soalan & Jawapan Awak:</h3>
+        <div id="print-list"></div>
+        
+        <p style="text-align:center; margin-top:50px; color:#64748b;">
+            Tarikh: <span id="print-date"></span>
+        </p>
+    </div>
+
+    <script>
+        // Soalan Mahmudah (Baik)
+        const mahmudah = [
+            "Saya selalu membantu ibu bapa di rumah.",
+            "Saya berkata 'terima kasih' bila diberi bantuan.",
+            "Saya menjaga kebersihan diri dan kelas.",
+            "Saya belajar dengan tekun setiap hari.",
+            "Saya memberi maaf kepada kawan yang salah.",
+            "Saya berkongsi makanan dengan rakan.",
+            "Saya menghormati guru dan orang yang lebih tua.",
+            "Saya bercakap dengan sopan.",
+            "Saya menyelesaikan kerja rumah tepat pada masa.",
+            "Saya bersabar apabila menghadapi masalah.",
+            "Saya menolong orang yang memerlukan.",
+            "Saya sentiasa jujur.",
+            "Saya rajin membaca buku.",
+            "Saya menjaga barang orang lain.",
+            "Saya berdoa sebelum makan dan tidur.",
+            "Saya bermain dengan adil.",
+            "Saya mendengar arahan guru.",
+            "Saya tidak membuang sampah merata-rata.",
+            "Saya selalu senyum dan mesra.",
+            "Saya menyayangi haiwan.",
+            "Saya berkongsi mainan dengan kawan.",
+            "Saya membantu adik atau kakak di rumah.",
+            "Saya menghargai usaha orang lain.",
+            "Saya tidak mengganggu kawan yang belajar.",
+            "Saya rajin solat.",
+            "Saya menjaga kesihatan.",
+            "Saya menjaga rahsia kawan.",
+            "Saya memberi semangat kepada kawan.",
+            "Saya sentiasa positif.",
+            "Saya menghormati agama orang lain."
+        ];
+
+        // Soalan Mazmumah (Buruk)
+        const mazmumah = [
+            "Saya suka berbohong kepada ibu bapa.",
+            "Saya malas buat kerja rumah.",
+            "Saya membuang sampah di tempat yang salah.",
+            "Saya tidak menghormati guru.",
+            "Saya mengganggu kawan semasa belajar.",
+            "Saya tidak suka berkongsi barang.",
+            "Saya marah-marah tanpa sebab.",
+            "Saya menipu dalam permainan.",
+            "Saya tidak menjaga kebersihan badan.",
+            "Saya suka mengejek orang lain.",
+            "Saya mengambil barang orang tanpa izin.",
+            "Saya membazirkan makanan.",
+            "Saya tidak mendengar arahan guru.",
+            "Saya suka bergaduh dengan kawan.",
+            "Saya tidak jujur semasa ujian.",
+            "Saya mengumpat kawan di belakang.",
+            "Saya sangat malas belajar.",
+            "Saya menyakiti haiwan.",
+            "Saya tidak mahu memberi maaf.",
+            "Saya bercakap kasar.",
+            "Saya tidak suka menolong orang.",
+            "Saya selalu menangguhkan kerja.",
+            "Saya mengabaikan solat.",
+            "Saya bermain terlalu lama.",
+            "Saya tidak menjaga barang sendiri.",
+            "Saya suka menyombong.",
+            "Saya tidak bersyukur.",
+            "Saya mengganggu orang yang sedang tidur.",
+            "Saya suka melanggar peraturan.",
+            "Saya selalu mengeluh tentang segalanya."
+        ];
+
+        let questions = [];
+        let userAnswers = [];
+        let currentQuestionIndex = 0;
+        let studentName = "";
+
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        function prepareQuestions() {
+            const allQuestions = [
+                ...mahmudah.map(q => ({text: q, correct: "Sikap Mahmudah"})),
+                ...mazmumah.map(q => ({text: q, correct: "Sikap Mazmumah"}))
+            ];
+            questions = shuffle(allQuestions);
+        }
+
+        function goToNameScreen() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('name-screen').classList.add('active');
+        }
+
+        function startQuiz() {
+            const nameInput = document.getElementById('full-name').value.trim();
+            if (nameInput === "") {
+                alert("Sila tulis nama penuh awak!");
+                return;
+            }
+            studentName = nameInput;
+            prepareQuestions();
+            userAnswers = new Array(60).fill(null);
+            currentQuestionIndex = 0;
+
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('quiz-screen').classList.add('active');
+            document.getElementById('student-name').textContent = studentName;
+            
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestionIndex];
+            document.getElementById('q-num').textContent = currentQuestionIndex + 1;
+            document.getElementById('q-counter').textContent = currentQuestionIndex + 1;
+            document.getElementById('question-text').textContent = q.text;
+
+            const percent = ((currentQuestionIndex) / 60) * 100;
+            document.getElementById('progress-bar').style.width = percent + '%';
+
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = `
+                <label class="option-label">
+                    <input type="radio" name="ans" value="Sikap Mahmudah" ${userAnswers[currentQuestionIndex]==="Sikap Mahmudah" ? "checked" : ""}> 
+                    Sikap Mahmudah 👍
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="ans" value="Sikap Mazmumah" ${userAnswers[currentQuestionIndex]==="Sikap Mazmumah" ? "checked" : ""}> 
+                    Sikap Mazmumah 👎
+                </label>
+            `;
+
+            document.getElementById('prev-btn').style.display = currentQuestionIndex === 0 ? 'none' : 'inline-block';
+            document.getElementById('next-btn').style.display = currentQuestionIndex === 59 ? 'none' : 'inline-block';
+            document.getElementById('submit-btn').style.display = currentQuestionIndex === 59 ? 'inline-block' : 'none';
+        }
+
+        function saveAnswer() {
+            const selected = document.querySelector('input[name="ans"]:checked');
+            if (selected) userAnswers[currentQuestionIndex] = selected.value;
+        }
+
+        function nextQuestion() {
+            saveAnswer();
+            if (currentQuestionIndex < 59) {
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            saveAnswer();
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            saveAnswer();
+            let score = 0;
+            for (let i = 0; i < 60; i++) {
+                if (userAnswers[i] === questions[i].correct) score++;
+            }
+
+            finalScore = score;
+
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const resultScreen = document.getElementById('result-screen');
+            resultScreen.classList.add('active');
+
+            document.getElementById('result-name').textContent = studentName;
+            document.getElementById('score-text').textContent = score;
+
+            const percent = Math.round((score / 60) * 100);
+            document.getElementById('score-circle').style.setProperty('--score-percent', percent + '%');
+
+            let msg = "";
+            if (score >= 50) msg = "Hebat! Kamu sangat bagus! Teruskan amalkan sikap baik ya! 🌟";
+            else if (score >= 40) msg = "Bagus! Masih boleh lagi baik. Usaha terus! 💪";
+            else msg = "Jangan sedih. Setiap hari boleh belajar sikap mahmudah. Kamu boleh! ❤️";
+
+            document.getElementById('result-message').innerHTML = msg;
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('print-section');
+            generatePrintContent();
+
+            const opt = {
+                margin: 15,
+                filename: `${studentName}_Laporan_Kuiz_Sikap.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function printReport() {
+            generatePrintContent();
+            document.getElementById('print-section').style.display = 'block';
+            window.print();
+            setTimeout(() => {
+                document.getElementById('print-section').style.display = 'none';
+            }, 500);
+        }
+
+        function generatePrintContent() {
+            document.getElementById('print-name').textContent = studentName;
+            document.getElementById('print-score').innerHTML = `${finalScore}/60 (${Math.round(finalScore/60*100)}%)`;
+            document.getElementById('print-date').textContent = new Date().toLocaleDateString('ms-MY', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+
+            const listDiv = document.getElementById('print-list');
+            listDiv.innerHTML = "";
+
+            for (let i = 0; i < 60; i++) {
+                const isCorrect = userAnswers[i] === questions[i].correct;
+                const div = document.createElement('div');
+                div.style.margin = "20px 0";
+                div.style.padding = "15px";
+                div.style.borderBottom = "2px solid #e2e8f0";
+                div.innerHTML = `
+                    <strong>Soalan ${i+1}:</strong> ${questions[i].text}<br><br>
+                    Jawapan awak: <span style="color:${isCorrect ? 'green' : 'red'}">${userAnswers[i] || 'Tiada jawapan'}</span><br>
+                    Jawapan betul: <strong>${questions[i].correct}</strong> ${isCorrect ? '✅' : '❌'}
+                `;
+                listDiv.appendChild(div);
+            }
+        }
+
+        function restartQuiz() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('explain-screen').classList.add('active');
+            document.getElementById('full-name').value = "";
+        }
+    </script>
+</body>
+</html>
